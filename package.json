@@ -1,0 +1,13 @@
+{
+    "name": "programming-examples",
+    "version": "1.0.0",
+    "description": "",
+    "license": "ISC",
+    "author": "",
+    "type": "commonjs",
+    "main": "index.js",
+    "scripts": {},
+    "workspaces": [
+        "packages/*"
+    ]
+}
