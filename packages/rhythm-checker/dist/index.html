@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Rhythm checker</title>
+        <link rel="icon" href="data:;base64,=">
+        <script src="src.js"></script>
+        <link rel="stylesheet" href="style.css"></link>
+    </head>
+
+    <body>
+        <a href="../">ホームに戻る</a>
+
+        <h1>Rhythm Checker</h1>
+        制作: <a href="https://github.com/InTheBloom">InTheBloom</a>
+
+        <h2>遊び方</h2>
+        <ol>
+            <li>スタートボタンを押す。</li>
+            <li>お手本リズムが再生されるので、その後お手本リズムと同じリズムでasdfghjklのいずれかのキーを押す。（半角モードにしてください。）</li>
+            <li>何回か行ったあと、結果が表示される。</li>
+        </ol>
+
+        <button id="game-start-button">スタート</button>
+        <div>
+            <canvas id="game-screen" width="1000" height="200"></canvas>
+        </div>
+        <div>
+            <p>得点: <span id="game-score"></span></p>
+        </div>
+
+        <h2>ステージクリエイト</h2>
+        <p>オリジナルステージを作成して共有できます。
+        1ステージ1行で表現され、1行32文字の半角<code>o</code>と半角<code>-</code>の組み合わせで表現されます。
+        空行は許容されますが、空行以外は余分な文字を入れないでください。（コメントアウト機能もありません。）
+        <code>o</code>のある場所はノーツが配置されます。</p>
+        <p>
+        この欄にステージが入力されている場合、そのステージをプレイすることができます。
+        ただし、上記ルールを満たさないステージを入力した場合は正常に動作しないことがあります。正常に動作しない場合でも警告等もありません。</p>
+        <textarea id="original-stage" rows="10" cols="32" placeholder="o---o---o-------o---o---o-------"></textarea>
+
+        <div>
+            <button id="create-stage-button">共有リンクを発行してクリップボードにコピー</button>
+            <p>生成されたURL: <span id="generated-url"></span></p>
+        </div>
+
+        <h2>利用させていただいた素材</h2>
+        <ul>
+            <li>メトロノームのカチッ by <a href="https://www.springin.org/sound-stock/subcategory/metronome/">メトロノーム | 無料 BGM・効果音のフリー音源素材 | Springin’ Sound Stock</a></li>
+            <li>手　フォーリー　パンッ01 by <a href="https://otologic.jp/free/se/human-hands01.html">フリー効果音：人間・手｜OtoLogic</a>（under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>）</li>
+            <li>笛ピッピー2 by <a href="https://www.springin.org/sound-stock/subcategory/whistle/">ホイッスル | 無料 BGM・効果音のフリー音源素材 | Springin’ Sound Stock</a></li>
+        </ul>
+        ※これら以外は自作です。
+
+        <h2>ライセンス</h2>
+        上記素材以外（<code>index.html</code>、<code>src.js</code>、<code>style.css</code>、<code>resources/</code>の上記素材以外）を<a href="https://creativecommons.org/public-domain/cc0/">CC0</a>とします。
+    </body>
+</html>
