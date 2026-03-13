@@ -125,10 +125,10 @@ function generate_maze(maze_size, random_goal) {
 // ========== 深さ優先探索 ==========
 function dfs(maze, start_y, start_x) {
     const stack = [];
-    const visited = [];
+    const visited = new Set();
     let pos = [start_y, start_x];
     stack.push(pos);
-    visited.push(pos);
+    visited.add(`${start_y},${start_x}`);
     const directions = [
         [-1, 0],
         [1, 0],
@@ -144,21 +144,16 @@ function dfs(maze, start_y, start_x) {
         for (const [dy, dx] of directions) {
             const ny = pos[0] + dy;
             const nx = pos[1] + dx;
-            if (
-                maze[ny][nx] === 0 &&
-                !visited.some(
-                    (element) => element[0] === ny && element[1] === nx,
-                ) &&
-                !stack.some((element) => element[0] === ny && element[1] === nx)
-            ) {
+            const key = `${ny},${nx}`;
+            if (maze[ny][nx] === 0 && !visited.has(key)) {
                 stack.push([ny, nx]);
+                visited.add(key);
             } else if (maze[ny][nx] === 3) {
                 exploring = false;
             }
         }
 
         explore_path.push(pos);
-        visited.push(pos);
     }
 
     return explore_path;
@@ -167,10 +162,10 @@ function dfs(maze, start_y, start_x) {
 // ========== 幅優先探索 ==========
 function bfs(maze, start_y, start_x) {
     const queue = [];
-    const visited = [];
+    const visited = new Set();
     let pos = [start_y, start_x];
     queue.push(pos);
-    visited.push(pos);
+    visited.add(`${start_y},${start_x}`);
     const directions = [
         [-1, 0],
         [1, 0],
@@ -186,21 +181,16 @@ function bfs(maze, start_y, start_x) {
         for (const [dy, dx] of directions) {
             const ny = pos[0] + dy;
             const nx = pos[1] + dx;
-            if (
-                maze[ny][nx] === 0 &&
-                !visited.some(
-                    (element) => element[0] === ny && element[1] === nx,
-                ) &&
-                !queue.some((element) => element[0] === ny && element[1] === nx)
-            ) {
+            const key = `${ny},${nx}`;
+            if (maze[ny][nx] === 0 && !visited.has(key)) {
                 queue.push([ny, nx]);
+                visited.add(key);
             } else if (maze[ny][nx] === 3) {
                 exploring = false;
             }
         }
 
         path.push(pos);
-        visited.push(pos);
     }
 
     return path;
@@ -225,19 +215,16 @@ function astar(maze, start_y, start_x) {
         return Math.abs(y - goal_y) + Math.abs(x - goal_x);
     }
 
-    // オープンリスト（f値でソートされる優先度付きキュー）
     // 各要素: [f, g, y, x]
     const open_list = [];
-    const visited = [];
-    const g_score = {};
 
-    const start_key = `${start_y},${start_x}`;
-    g_score[start_key] = 0;
+    const visited = new Set();
 
     let pos = [start_y, start_x];
     const f = heuristic(start_y, start_x);
     open_list.push([f, 0, start_y, start_x]);
-    visited.push(pos);
+    visited.add(`${start_y},${start_x}`);
+
     const directions = [
         [-1, 0],
         [1, 0],
@@ -248,27 +235,22 @@ function astar(maze, start_y, start_x) {
 
     let exploring = true;
     while (exploring) {
-        // f値が最小の要素を取り出す
-        open_list.sort((a, b) => a[0] - b[0]);
-        const [_f, g, py, px] = open_list.shift();
+        // f値が最小の要素のインデックスを見つける
+        let min_idx = 0;
+        for (let i = 1; i < open_list.length; i++) {
+            if (open_list[i][0] < open_list[min_idx][0]) min_idx = i;
+        }
+        const [_f, g, py, px] = open_list.splice(min_idx, 1)[0];
         pos = [py, px];
 
         for (const [dy, dx] of directions) {
             const ny = pos[0] + dy;
             const nx = pos[1] + dx;
-            const neighbor_key = `${ny},${nx}`;
+            const key = `${ny},${nx}`;
             const new_g = g + 1;
 
-            if (
-                maze[ny][nx] === 0 &&
-                !visited.some(
-                    (element) => element[0] === ny && element[1] === nx,
-                ) &&
-                !open_list.some(
-                    (element) => element[2] === ny && element[3] === nx,
-                )
-            ) {
-                g_score[neighbor_key] = new_g;
+            if (maze[ny][nx] === 0 && !visited.has(key)) {
+                visited.add(key);
                 const f = new_g + heuristic(ny, nx);
                 open_list.push([f, new_g, ny, nx]);
             } else if (maze[ny][nx] === 3) {
@@ -277,7 +259,6 @@ function astar(maze, start_y, start_x) {
         }
 
         explore_path.push(pos);
-        visited.push(pos);
     }
 
     return explore_path;
